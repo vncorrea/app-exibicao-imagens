@@ -2,22 +2,25 @@ package com.example.exibicao_imagens
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
+import com.example.exibicao_imagens.databinding.ActivityMainBinding
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
+
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
-
-        val imagem = R.id.imageView
-        val idBtn = R.id.button
 
         val imagesUrl = listOf(
             "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0",
@@ -72,8 +75,8 @@ class MainActivity : AppCompatActivity() {
             "https://images.unsplash.com/photo-1595260284236-d36d5ad04993"
         )
 
-        findViewById<android.widget.Button>(idBtn).setOnClickListener {
-            showImage(imagesUrl, imagem);
+        binding.button.setOnClickListener {
+            showImage(imagesUrl, binding.imageView)
         }
 
 
@@ -84,8 +87,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun showImage(imagesUrl: List<String>, imagem: Int) {
+    private fun showImage(imagesUrl: List<String>, imagem: ImageView) {
         val randomUrl = imagesUrl[Random.nextInt(imagesUrl.size)]
-        Glide.with(this).load(randomUrl).into(findViewById(imagem))
+        Glide.with(this).load(randomUrl).into(imagem)
     }
 }
