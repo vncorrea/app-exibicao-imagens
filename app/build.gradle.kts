@@ -4,6 +4,10 @@ plugins {
 }
 
 android {
+    buildFeatures {
+        viewBinding = true
+    }
+    
     namespace = "com.example.exibicao_imagens"
     compileSdk = 34
 
