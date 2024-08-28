@@ -73,8 +73,7 @@ class MainActivity : AppCompatActivity() {
         )
 
         findViewById<android.widget.Button>(idBtn).setOnClickListener {
-            val randomUrl = imagesUrl[Random.nextInt(imagesUrl.size)]
-            Glide.with(this).load(randomUrl).into(findViewById(imagem))
+            showImage(imagesUrl, imagem);
         }
 
 
@@ -83,5 +82,10 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+    }
+
+    private fun showImage(imagesUrl: List<String>, imagem: Int) {
+        val randomUrl = imagesUrl[Random.nextInt(imagesUrl.size)]
+        Glide.with(this).load(randomUrl).into(findViewById(imagem))
     }
 }
