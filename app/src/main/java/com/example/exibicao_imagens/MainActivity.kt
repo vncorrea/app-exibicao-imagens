@@ -2,7 +2,11 @@ package com.example.exibicao_imagens
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.view.View
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -75,8 +79,14 @@ class MainActivity : AppCompatActivity() {
             "https://images.unsplash.com/photo-1595260284236-d36d5ad04993"
         )
 
+        showImage(imagesUrl, binding.imageView)
+        binding.progressBar.visibility = View.GONE
+
         binding.button.setOnClickListener {
-            showImage(imagesUrl, binding.imageView)
+            binding.progressBar.visibility = View.VISIBLE
+            Handler(Looper.getMainLooper()).postDelayed({
+                showImage(imagesUrl, binding.imageView)
+            }, 500)
         }
 
 
@@ -87,8 +97,52 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        Toast.makeText(this, "Bem-vindo! Função onStart", Toast.LENGTH_SHORT).show()
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        Toast.makeText(this, "Bem-vindo! Função onResume", Toast.LENGTH_SHORT).show()
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        Toast.makeText(this, "Até logo! Função onPause", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        Toast.makeText(this, "Até logo! Função onStop", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        Toast.makeText(this, "Até logo! Função onDestroy", Toast.LENGTH_SHORT).show()
+    }
+
     private fun showImage(imagesUrl: List<String>, imagem: ImageView) {
         val randomUrl = imagesUrl[Random.nextInt(imagesUrl.size)]
-        Glide.with(this).load(randomUrl).into(imagem)
+        Glide.with(this).load(randomUrl).into(imagem).also {
+            binding.progressBar.visibility = View.GONE
+        }
     }
 }
