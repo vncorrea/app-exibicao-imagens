@@ -1,9 +1,12 @@
 package com.example.exibicao_imagens
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
@@ -89,6 +92,16 @@ class MainActivity : AppCompatActivity() {
             }, 500)
         }
 
+        binding.buttonNewPhoto.setOnClickListener {
+            val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
+            try {
+                startActivityForResult(takePictureIntent, 1)
+            } catch (e: Exception) {
+                Log.e("MainActivity", "Erro ao abrir a câmera", e)
+            }
+        }
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -143,6 +156,17 @@ class MainActivity : AppCompatActivity() {
         val randomUrl = imagesUrl[Random.nextInt(imagesUrl.size)]
         Glide.with(this).load(randomUrl).into(imagem).also {
             binding.progressBar.visibility = View.GONE
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            val imageBitmap = data?.extras?.get("data") as? android.graphics.Bitmap
+            binding.imageView.setImageBitmap(imageBitmap)
+
+            Glide.with(this).load(imageBitmap).into(binding.imageView)
         }
     }
 }
