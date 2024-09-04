@@ -1,9 +1,12 @@
 package com.example.exibicao_imagens
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
@@ -89,6 +92,12 @@ class MainActivity : AppCompatActivity() {
             }, 500)
         }
 
+        binding.buttonNewPhoto.setOnClickListener {
+            val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
+            startActivityForResult(takePictureIntent, 1)
+        }
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -142,6 +151,17 @@ class MainActivity : AppCompatActivity() {
     private fun showImage(imagesUrl: List<String>, imagem: ImageView) {
         val randomUrl = imagesUrl[Random.nextInt(imagesUrl.size)]
         Glide.with(this).load(randomUrl).into(imagem).also {
+            binding.progressBar.visibility = View.GONE
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            val imageBitmap = data?.extras?.get("data") as? android.graphics.Bitmap
+            binding.imageView.setImageBitmap(imageBitmap)
+
             binding.progressBar.visibility = View.GONE
         }
     }
