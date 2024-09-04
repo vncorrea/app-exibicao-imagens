@@ -93,9 +93,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.buttonNewPhoto.setOnClickListener {
-            val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
-            startActivityForResult(takePictureIntent, 1)
+            try {
+                startActivityForResult(intent, 1)
+            } catch (e: Exception) {
+                Log.e("MainActivity", "Erro ao abrir a câmera", e)
+            }
         }
 
 
