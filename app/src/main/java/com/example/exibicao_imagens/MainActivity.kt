@@ -93,10 +93,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.buttonNewPhoto.setOnClickListener {
-            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
             try {
-                startActivityForResult(intent, 1)
+                startActivityForResult(takePictureIntent, 1)
             } catch (e: Exception) {
                 Log.e("MainActivity", "Erro ao abrir a câmera", e)
             }
@@ -166,7 +166,7 @@ class MainActivity : AppCompatActivity() {
             val imageBitmap = data?.extras?.get("data") as? android.graphics.Bitmap
             binding.imageView.setImageBitmap(imageBitmap)
 
-            binding.progressBar.visibility = View.GONE
+            Glide.with(this).load(imageBitmap).into(binding.imageView)
         }
     }
 }
